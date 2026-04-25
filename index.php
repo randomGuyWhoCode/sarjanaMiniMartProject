@@ -1,10 +1,10 @@
 <?php include "header.php" ?>
 <div class="main-content">
     <div class="sales-banner">
-        <img src="./img/sales_banner.png" alt="Sales banner">
+        <a href="#top-product"><img src="./img/sales_banner.png" alt="Sales banner"></a>
     </div>
     
-    <div class="items-container" >
+    <div class="items-container" id="top-product">
         <h1>Top Product</h1>
         <div class="card-items">
             <?php 
