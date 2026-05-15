@@ -4,6 +4,7 @@
                 <img src="'. $image .'" alt="">
                 <div>
                     <h3>' . $name . '</h3>
+                    <p>RM 5.99</p>
                 </div>
               </a>';
     }

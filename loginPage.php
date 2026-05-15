@@ -9,7 +9,8 @@
 </head>
 <body>
     <div class="login-page">
-        <img src="./img/company_logo_transparent.png" alt="">
+        
+        <img src="./img/Sarjana-Logo.png" alt="Company logo">
         <form action="./index.php" method="POST" class="login-form">
             <h1>LOG IN</h1>
             <label>
@@ -31,7 +32,8 @@
             <div class="button-container">
                 <button class="login-button">Create New Account</button>
             </div>
-    </form>
+        </form>
+        
     </div>
 </body>
 </html>

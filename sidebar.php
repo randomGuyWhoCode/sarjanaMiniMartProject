@@ -5,5 +5,5 @@
         <li><a href="">History</a></li>
         <li><a href="">About</a></li>
     </ul>
-    <a href="./loginPage.php"  onmouseover="this.style.color='red';" onMouseOut="this.style.color='bisque'">Log Out</a>
+    <a href="./loginPage.php"  onmouseover="this.style.color='red';" onMouseOut="this.style.color='white '">Log Out</a>
 </div>

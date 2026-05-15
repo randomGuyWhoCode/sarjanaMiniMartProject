@@ -1,9 +1,33 @@
 <?php include "header.php" ?>
 <div class="main-content">
     <div class="sales-banner">
-        <a href="#top-product"><img src="./img/sales_banner.png" alt="Sales banner"></a>
+        <a href="#top-product"><img src="./img/sales_banner2.png" alt="Sales banner"></a>
     </div>
-    
+    <hr>
+    <div class="category-section container">
+        <h1>EXPLORE OUR CATEGORIES</h1>
+        <div class="category-flex">
+            <div class="category-item">
+                    <div class="category-icon"><i class="fas fa-cookie"></i></div>
+                    <span>Snacks</span>
+            </div>
+
+            <div class="category-item">
+                    <div class="category-icon"><i class="fa-solid fa-bottle-water"></i></i></div>
+                    <span>Drinks</span>
+            </div>
+
+            <div class="category-item">
+                    <div class="category-icon"><i class="fas fa-pump-soap"></i></div>
+                    <span>Hygiene</span>
+            </div>
+
+            <div class="category-item">
+                <div class="category-icon"><i class="fa fa-medkit"></i></div>
+                <span>Medicine</span>
+            </div>
+        </div>
+    </div>
     <div class="items container" id="top-product">
         <h1>Top Product</h1>
         <div class="card-items">
@@ -14,7 +38,9 @@
                         "Biscuit Tiger"=>"./img/biscuit_tiger.png",
                         "Vico"=>"./img/Vico.png",
                         "Colgate Toothbrush"=>"./img/Colgate_toothbrush.png",
-                        "Indomie"=>"./img/indomie-mi.png"];
+                        "Indomie"=>"./img/indomie-mi.png",
+                        "Biscuit Tiger XL"=>"./img/biscuit_tiger.png", 
+                        "Farm fresh original 250ml"=>"./img/fresh_milk_1L.png",];
                 foreach($items as $key => $value) {
                     createCard($key, $value);
                 }
@@ -24,7 +50,7 @@
 
 
     <div class="items container">
-        <h2>Browse Other Products</h2>
+        <h1>Browse Other Products</h1>
         <div class="card-items">
         <?php 
                 include_once("card.php");

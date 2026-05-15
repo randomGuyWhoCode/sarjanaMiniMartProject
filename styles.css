@@ -1,10 +1,19 @@
 :root {
-    --color1: bisque;/*#F8F3E7  or bisque*/
+    --background1: #f4f7f6;
+    --background2: #023E8A;
+    --background3: #F4F3F2;
+    --background4:#0096C730;
+    --background5:#5e3d1522;
+    --background6: #0F285422;
+    --color1:#1C4D8D;
+    --text-color1: white;
+    --text-color2: #0F2854;
+    /* --color1: bisque;#F8F3E7  or bisque
     --color2: rgb(94, 61, 21);
     --color3: rgb(71, 46, 15);
     --color4: #FFFFFFAA;
-    --color5: #5e3d1522;
-    --text-color: white;
+    --color5: #5e3d1522; */
+    
 }
 * {
   margin: 0;
@@ -14,10 +23,10 @@
 body {
     height:100vh;
     width:100vw;
-    background-color:var(--color1);
+    background-color:var(--background1);
     font-family:sans-serif;
     overflow-x: hidden;
-    color: var(--color2);
+    color: var(--text-color2);
 }
 /* Basic User Interface eg. button */
 a {
@@ -27,14 +36,14 @@ a {
 button {
     width: 100px;
     height: 30px;
-    background-color: var(--color2);
-    color: var(--text-color);
+    background-color: var(--background2);
+    color: var(--text-color1);
     border: 2px solid black;
     border-radius: 4px;
     cursor: pointer;
 }
 button:hover {
-    background-color: var(--color3);
+    background-color: var(--color1);
     transform: translateY(-1px);
     box-shadow: 0 0 25px rgba(0,0,0,0.1.5);
 }
@@ -48,24 +57,28 @@ button:hover {
     
 }
 .back-arrow:hover {
-    color: var(--color3);
+    color: var(--color1);
     transform: translateY(-10px);
     box-shadow: 0 20px 25px rgba(0,0,0,0.2);
 }
 
 
+
 /*  */
 .top-bar, .footer {
     width:100vw;
-    background-color:var(--color2);
+    background-color:var(--background2);
 }
 .top-bar {
-    border-bottom: 2px solid var(--color3);
+    border-bottom: 2px solid var(--color1);
     height:9vh;
 }
+.top-bar i {
+    height: 100%;
+}
 .footer {
-    color: var(--text-color);
-    border-top: 2px solid var(--color3);
+    color: var(--text-color1);
+    border-top: 2px solid var(--color1);
     min-height:8vh;
 }
 .follow-us a {
@@ -84,7 +97,7 @@ button:hover {
 }
 input {
     width: 50vw;
-    height: 22px;
+    height: 26px;
 }
 .search-bar {
     
@@ -109,21 +122,73 @@ input {
     width: 100%;
 }
 
+/* Category section */
+.category-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    height: 200px;
+    /* border: 2px solid var(--background2);
+    border-radius: 5px; */
+}
+.category-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+}
+.category-flex {
+    display: flex;
+    justify-content: space-around;
+    gap: 25px;
+    cursor: pointer;
+}
 
+.category-item {
+    background-color: var(--background1);
+    
+    outline: 2px solid var(--background2);
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.category-item:hover {
+    color: var(--text-color1);
+    background-color: var(--background2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+}
 
 /* Item card*/
 .card-items {
+    
+    /* 
+    my code duh
     display: flex;
     justify-content: center;
-    gap: 5px;
-    flex-wrap: wrap;
+    gap: 10px;
+    flex-wrap: wrap; */
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 .card {
+    /* 
+    my code duh
     margin-top: 10px;
-    background-color: var(--text-color);
-    width: 175px;
-    height:235px;
-    border: 2px solid var(--color2);
+    background-color: var(--background3);
+    width: 185px;
+    height:245px;
+    border: 2px solid var(--background2);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -131,13 +196,21 @@ input {
     font-size: 12px;
     border-radius: 5px;
     text-decoration: none;
-    color: inherit;
+    color: inherit; */
+
+    background-color: #ffffff;
+    border-radius: 12px; 
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .items {
     margin: 10px auto;
     padding-top: 5px;
     text-align: center;
-    background-color:var(--color4);
+    background-color:var(--background4);
     padding-bottom: 50px;
     border-radius: 5px;
 }
@@ -152,17 +225,18 @@ input {
 }
 @keyframes glow {
     0% {
-		box-shadow: 0 0 7px var(--color2);
+		box-shadow: 0 0 7px var(--background2);
     }	
     100% {
-		box-shadow: 0 0 7px var(--color1);
+		box-shadow: 0 0 7px var(--background1);
     }
 }
 
 .card img {
-    height:70%;
+    /* height:70%; */
+    height: 160px;
     width: 100%;
-    border-bottom: 2px solid var(--color2);
+    border-bottom: 2px solid var(--background2);
 }                     
 .card img:hover {
     border-bottom-color: black;
@@ -173,7 +247,7 @@ input {
     width: 80%;
     height: auto;
     margin: auto;
-    background-color: var(--color4);
+    background-color: var(--background4);
     padding: 10px;
     box-shadow: 0 0 25px rgba(0,0,0,0.25);
  }
@@ -223,18 +297,18 @@ input {
 .reviews {
     margin: 30px auto;
     padding: 15px;
-    border-color: var(--color2);
+    border-color: var(--background2);
     border-radius: 10px;
-    background-color: var(--color4);
+    background-color: var(--background4);
 }
 .reviews legend {
     font-weight: bolder;
-    border: 2px solid var(--color2);
-    background-color: var(--text-color);
+    border: 2px solid var(--background2);
+    background-color: var(--background3);
 }
 .review {
     padding: 10px;
-    background-color: #5E3d1522;
+    background-color: var(--background6); /*#5E3d1522*/
     margin-bottom: 10px;
 }
 .review div {
@@ -257,7 +331,7 @@ input {
 }
 .profile {
     /* width: 100%; */
-    height: 85vh;
+    height: 86vh;
     display: flex;
     justify-content: center;
     align-items:center;
@@ -285,8 +359,8 @@ input {
     min-width: 140px;
     position:fixed;
     top: 0;
-    background-color: var(--color2);
-    color: var(--color1);
+    background-color: var(--background2);
+    color: var(--background1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -294,7 +368,7 @@ input {
     font-size: 1.2em;
 }
 .sidenav a:last-child:hover {
-    background-color: var(--color3);
+    background-color: var(--color1);
     transform: translateY(-2px);
 }
 .sidenav a:last-child {
@@ -306,7 +380,7 @@ input {
     padding: 10px;
 }
 #sidenav-option li:hover {
-    background-color: var(--color3);
+    background-color: var(--color1);
     transform: translateY(-2px);
 }
 #sidenav-option li:first-child {
@@ -321,16 +395,16 @@ input {
     align-items: center;
     justify-content: center;
     margin: 10px auto ;
-    border: 2px solid var(--color2);
+    border: 2px solid var(--background2);
     padding: 10px;
-    background-color: var(--color4);
+    background-color: var(--background4);
 }
 .cart-card {
     width: 100%;
     height: 220px;
-    background-color: var(--text-color);
+    background-color: var(--background3);
     display: flex;
-    border: 2px solid var(--color2);
+    border: 2px solid var(--background2);
     align-items: center;
 }
 .cart-card img {
@@ -348,8 +422,8 @@ input {
 }
 .counter {
     display: flex;
-    background-color: var(--color5);
-    outline: 2px solid var(--color2);
+    background-color: var(--background5);
+    outline: 2px solid var(--background2);
     border-radius: 8px;
     align-items: center;
 }
@@ -357,8 +431,8 @@ input {
     padding: 7px 10px;
 }
 .counter p {
-    border-left: 2px solid var(--color2);
-    border-right: 2px solid var(--color2);
+    border-left: 2px solid var(--background2);
+    border-right: 2px solid var(--background2);
 }
 .counter button {
     all: unset;
@@ -371,7 +445,7 @@ input {
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
 }
 .login-button {
@@ -382,13 +456,13 @@ input {
     align-items: center;
 }
 .login-page img {
-    width: 40%;
+    width: 35%;
     height: auto;
 }
 .login-form {
     width: 35%;
     height: auto;
-    background-color: var(--text-color);
+    background-color: var(--background3);
     padding: 25px;
     border-radius: 8px;
 }
