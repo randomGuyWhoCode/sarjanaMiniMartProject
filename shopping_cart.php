@@ -1,6 +1,9 @@
-<?php include "header.php" ?>
+<?php include "header.php";?>
 <div class="shopping-cart container">
-    <h1 style="margin-bottom: 20px;">Shopping Cart</h1>
+    <div class="header">
+            <h1 >Shopping Cart</h1>
+            <i class="fa-solid fa-cart-shopping fa-2x"></i>
+        </div>
     <?php 
         $items = ["Farm fresh original 1l"=>"./img/fresh_milk_1L.png",
                         "Farm fresh chocolate 1l"=>"./img/chocolate_milk.png",
@@ -14,5 +17,6 @@
             createShoppingCard($key, $value);
         }
     ?>
+    <button>Checkout</button>
 </div>
 <?php include "footer.php"?>

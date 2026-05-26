@@ -1,3 +1,106 @@
+<?php
+// We temporarily call the Google client settings just to generate the dynamic login URL
+require_once 'google-api/google-api/vendor/autoload.php';
+include_once "dbconn.php";
+
+$client = new Google\Client();
+
+
+$client->setClientId('');
+$client->setClientSecret('');
+
+$host = $_SERVER['HTTP_HOST'];
+if ($host === 'localhost') {
+    $client->setRedirectUri('http://localhost/sarjanaMiniMartProject/loginPage.php');
+}
+
+$client->addScope('email');
+$client->addScope('profile');
+$client->setPrompt('select_account');
+
+// Generate the secure URL to redirect to Google
+$login_url = $client->createAuthUrl();
+
+if (isset($_GET['code'])) {
+    $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+    
+    if (!isset($token["error"])) {
+        $client->setAccessToken($token['access_token']);
+        $google_oauth = new Google_Service_Oauth2($client);
+        $google_account_info = $google_oauth->userinfo->get();
+
+        session_start();
+
+        // Get user info from email
+        $email = mysqli_real_escape_string($dbconn, trim($google_account_info->email));
+        $id = $google_account_info->id;
+        $name = $google_account_info->name;
+        $profile_pic = $google_account_info->picture;
+
+        // $_SESSION["name"] = $name;
+        // $_SESSION["id"] = $id;
+        // $_SESSION["email"] = $email;
+        // $_SESSION["profile_pic"] = $profile_pic;
+
+
+        // Check staff
+        // $sql = "SELECT * FROM employee WHERE email = '$email'";
+        // $query = mysqli_query($dbconn, $sql) or die ("Error: " . mysqli_error($dbconn));
+        // if (mysqli_num_rows($query) != 0) {
+        //     $r = mysqli_fetch_assoc($query);
+            
+        //     $_SESSION["name"] = $name;
+        //     $_SESSION["id"] = $id;
+        //     $_SESSION["email"] = $email;
+        //     $_SESSION["profile_pic"] = $profile_pic;
+
+
+        //     $_SESSION['studentnumber'] = $r['employee_id']; 
+        //     $_SESSION['studentname'] = $r['name'];
+        //     echo "<script>console.log({$_SESSION['studentnumber']});</script>";
+            
+        //     // Redirect to staff menu
+        //     header("Location: staff_menu.php");
+        //     // header("Location: index.php");
+        //     exit();
+        // }
+
+
+        // Search your database using only the email address
+        $sql = "SELECT * FROM dbstudentsphg.students WHERE studentemailuitm = '$email'";
+        $query = mysqli_query($dbconn, $sql) or die ("Error: " . mysqli_error($dbconn));
+        
+        if (mysqli_num_rows($query) == 0) {
+            // Unregistered email—deny access
+            echo "<script>alert('Your Google account is not registered as a student!'); window.location='login.php';</script>";
+            exit();
+        } else {
+            // Get customer info from database
+            $r = mysqli_fetch_assoc($query);
+
+            $_SESSION["name"] = $r['studentname'];
+            $_SESSION["id"] = $r['studentno'];
+            $_SESSION["email"] = $email;
+            $_SESSION["programcode"] = $r['programcode'];
+            $_SESSION["profile_pic"] = $profile_pic;
+
+
+            echo "<script>console.log({$_SESSION['studentnumber']});</script>";
+            
+            // Redirect to menu
+            header("Location: index.php");
+            exit();
+        }
+    } else {
+        echo "<script>console.log('test5');</script>";
+        echo "Error fetching access token.";
+        exit();
+    }
+
+    
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,33 +110,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sarjana Minimarket</title>
 </head>
-<body>
+<body class="login-background">
     <div class="login-page">
         
         <img src="./img/Sarjana-Logo.png" alt="Company logo">
-        <form action="./index.php" method="POST" class="login-form">
-            <h1>LOG IN</h1>
-            <label>
-                <p>Email:</p>
-                <input type="text">
-            </label>
-        
-            <label>
-                <p>Pasword:</p>
-                <input type="password">
-            </label>
+        <div class="horizontal-line"></div>
             
-            <div class="button-container">
-                <button class="login-button" type="submit">Log In</button>
-            </div>
-            
-            <div class="separator">Or</div>
+        <div class="login-form">
+            <h1><i class="fa fa-user" aria-hidden="true"></i> LOG IN </h1>
 
             <div class="button-container">
-                <button class="login-button">Create New Account</button>
+                <a href="<?php echo $login_url; ?>" class="google-login-button" style="text-decoration: none;">
+                    <label><i class="fa fa-google google-icon" aria-hidden="true"></i> Log In with Google</label>
+                </a>
             </div>
-        </form>
+
+        </div>
         
+
     </div>
 </body>
 </html>
+
+<script>
+function handleCredentialResponse(response) {
+  console.log("Encoded JWT ID token: " + response.credential);
+
+  // Send to your PHP backend
+  fetch("google-login.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ token: response.credential })
+  })
+  .then(res => res.text())
+  .then(data => {
+    console.log(data);
+    window.location.href = "index.php";
+  });
+} 
+</script>

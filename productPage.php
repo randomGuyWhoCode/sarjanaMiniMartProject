@@ -1,5 +1,5 @@
 <?php include "header.php" ?>
-<a onclick="history.back()" class="back-arrow">&#129144;</a>
+<a onclick="history.back()" class="back-arrow">&#129144; Back</a>
 
 <form class="product-card">
     <div class="product-information">
@@ -17,8 +17,9 @@
 </form>
 
 
-<fieldset class="reviews container">
-    <legend>Comment</legend>
+
+<div class="review-section">
+    <h1>Comment <i class="fa-solid fa-comment"></i></h1>
     <?php
         $customer = [
             ["name"=>"Ammar",
@@ -51,5 +52,5 @@
         }
     ?>
     <button>Load more...</button>
-</fieldset>
+</div>
 <?php include "footer.php"?>
