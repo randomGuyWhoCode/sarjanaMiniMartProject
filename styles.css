@@ -255,6 +255,18 @@ input {
     margin: 0 auto;
     overflow: hidden;
 }
+.card-bg {
+    width: 185px;
+    height: 300px;
+    margin: auto;
+    background-color: var(--background7);
+    border-radius: 12px; 
+    padding: 10px 20px 10px 20px;
+    text-align: center;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 .card {
     /* 
     my code duh
@@ -271,17 +283,10 @@ input {
     border-radius: 5px;
     text-decoration: none;
     color: inherit; */
-    width: 185px;
-    height: 300px;
-    margin: auto;
-    background-color: var(--background7);
-    border-radius: 12px; 
-    padding: 20px 20px 10px 20px;
+    width: 100%;
+    height: 90%;
 
-    text-align: center;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -305,7 +310,7 @@ input {
 }
 
 /*Item card animation*/
-.card:hover {
+.card-bg:hover {
     background-color: var(--background1);
     animation: glow 800ms ease-out infinite alternate;
     transform: translateY(-1px);
@@ -324,12 +329,60 @@ input {
 
 .card img {
     /* height:70%; */
-    height: 160px;
+    height: 155px;
     width: 100%;
+    object-fit: contain;
     border-bottom: 2px solid var(--background2);
+    
 }                     
 .card img:hover {
     border-bottom-color: black;
+}
+.modal {
+    display: none;
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.5);
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: var(--background7); 
+    margin:15% auto;
+    padding: 20px; 
+    width: 300px; 
+    border-radius: 8px;
+    position: relative;
+}
+.modal-product-image {
+    width: 100%;
+    max-height: 200px; 
+    object-fit: contain;
+}
+#modal-cart-form input{
+    width: 50px; 
+    margin-bottom: 15px;
+}
+.modal-btn {
+    width: 100%; 
+    padding: 10px; 
+    background: var(--background2); 
+    color: var(--background7); 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+/* The Close Button */
+.close-btn {
+  position: absolute; 
+  right: 15px; 
+  top: 10px; 
+  cursor: pointer; 
+  font-size: 24px;
 }
 
 /* Product Page */
@@ -480,6 +533,7 @@ input {
     height: fit-content;
     outline: 2px solid var(--background2);
     outline-offset: 3px;
+    background-color: var(--background2);
 }
 .profile-information {
     margin-left: 20px;
@@ -540,7 +594,7 @@ input {
 .shopping-cart .header {
     margin-bottom: 30px;
 }
-.cart-card, .data-card {
+.cart-card, .data-slip {
     /* width: 100%;
     height: 220px;
     background-color: var(--background3);
@@ -558,23 +612,23 @@ input {
     width: 21%;
     height: 20%;
 }
-.data-card {
+.data-slip {
     height: 60px;
     font-size: 0.8em;
     padding: 4px;
 }
-.data-card > *{
+.data-slip > * {
     width: 12%;
-    height: 12%;
+    /* height: 12%; */
 }
-.data-card .cart-information {
+.data-slip .cart-information {
     width: 65%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding-top: 10px;
 }
-.cart-card:hover, .data-card:hover {
+.cart-card:hover, .data-slip:hover {
     animation: glow 1600ms ease-out infinite alternate;
     transform: translateY(-1px);
 }
@@ -629,6 +683,8 @@ input {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    outline: 2px solid var(--background7);
+    outline-offset: 6px;
 }
 .login-button {
     width: 140px;
@@ -696,6 +752,10 @@ input {
 
 .separator:not(:empty)::after {
   margin-left: .25em;
+}
+.underline:hover {
+    color: black;
+    text-decoration: underline;
 }
 .button-container {
     display: flex;
@@ -782,6 +842,54 @@ input {
     color: green;
 }
 
+/* update data page */
+.updateProduct {
+    width: 90%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.updateProduct div:first-child {
+    
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 40px;
+}
+.updateProduct div:first-child img {
+    height: 40vh;
+    width: fit-content;
+}
+.updateProduct input[type="file"] {
+    margin: auto;
+    width: auto;
+}
+
+.updateInfo {
+    width: 90%;
+    height: auto;
+    display: flex;
+    flex-direction: column; 
+}
+.updateInfo > * {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.updateInfo label:last-child {
+    width: 100%;
+    height: fit-content;
+    align-items: flex-start;
+    outline-offset: 8px;
+}
+
+
+
 /* Login page */
 @media only screen and (max-width: 1000px) {
     .login-page img, .horizontal-line {
@@ -814,8 +922,9 @@ input {
         padding: 0;
         grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
     }
-    .card {
+    .card-bg {
         width: 155px;
+        height: 265px;
         font-size: 0.85em;
     }
     .category-section {
@@ -860,5 +969,4 @@ input {
     .manage-page {
         font-size: 0.85em;
     }
-
 }

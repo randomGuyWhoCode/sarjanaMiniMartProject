@@ -21,7 +21,7 @@
         <li><a href=""><i class="fa-solid fa-clock-rotate-left"></i>  <span class="side-text">History</span></a></li>
         <li><a href=""><i class="fa-solid fa-circle-info"></i>  <span class="side-text">About</span></a></li>
     </ul>
-    <a href="./loginPage.php" class="logout"><span class="side-text">Log Out</span>  <i class="fa-solid fa-right-from-bracket"></i></a>
+    <a href="./logout.php" class="logout"><span class="side-text">Log Out</span>  <i class="fa-solid fa-right-from-bracket"></i></a>
 </div>';
     }
 
@@ -34,7 +34,7 @@
                     <li><a href="./manageData.php"><i class="fa-solid fa-database"></i> <span class="side-text">Manage Data</span></a></li>
                     <li><a href="./pendingPage.php"><i class="fa-regular fa-clock"></i> <span class="side-text">Pending</span></a></li>
                 </ul>
-                <a href="./loginPage.php" class="logout"><span class="side-text">Log Out</span>  <i class="fa-solid fa-right-from-bracket"></i></a>
+                <a href="./logout.php" class="logout"><span class="side-text">Log Out</span>  <i class="fa-solid fa-right-from-bracket"></i></a>
               </div>';
     }
 ?>

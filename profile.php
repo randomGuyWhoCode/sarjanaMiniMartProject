@@ -18,24 +18,29 @@
             <div class="header">
                 <h1 >Profile</h1>
                 <p>Hello <?php 
-                            $nameArr = explode(" " , $_SESSION['name']);
-                            if(count($nameArr) <= 0) {
-                                echo "Guest";
-                            }else if(count($nameArr) == 1) {
-                                echo $nameArr[0];
+                            if(isset($_SESSION['name'])) {
+                                $nameArr = explode(" " , $_SESSION['name']);
+                                if(count($nameArr) <= 0) {
+                                    echo "Guest";
+                                }else if(count($nameArr) == 1) {
+                                    echo $nameArr[0];
+                                }else {
+                                    echo $nameArr[0] . " " . $nameArr[1];
+                                }
                             }else {
-                                echo $nameArr[0] . " " . $nameArr[1];
+                                echo "Guest";
                             }
+                            
                           ?></p>
             </div>
             <div class="profile container">
                 
-                <img src= "<?php echo (($_SESSION['profile_pic'])?$_SESSION['profile_pic']:'./img/default-profile.png'); ?>" alt="profile image">
+                <img src= "<?php echo (isset($_SESSION['profile_pic'])?$_SESSION['profile_pic']:"img/default-profile.png") ?>" alt="profile image">
                 <div class="profile-information">
                     
-                    <p><?php echo $_SESSION['name'] ?></p>
-                    <p><?php echo $_SESSION['email'] ?></p>
-                    <p><?php echo $_SESSION['programcode'] ?></p>
+                    <p><?php echo (isset($_SESSION['name'])?$_SESSION['name']:"Guest") ?></p>
+                    <p><?php echo (isset($_SESSION['email'])?$_SESSION['email']:"") ?></p>
+                    <p><?php echo (isset($_SESSION['programcode'])?$_SESSION['programcode']:"") ?></p>
                     <a href="./profile.php">Edit Profile</a>
                 </div>
                 

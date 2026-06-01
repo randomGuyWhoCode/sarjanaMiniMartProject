@@ -21,7 +21,7 @@
                 
             </div>
             <a href="./shopping_cart.php"><img class="top-bar-img" src="./img/cart.png" alt="shopping cart icon"></a>
-            <a href="./profile.php"><img class="top-bar-img profile-img" src="<?php echo $_SESSION['profile_pic'] ?>" alt="profile image"></a>
+            <a href="./profile.php"><img class="top-bar-img profile-img" src="<?php echo (isset($_SESSION['profile_pic'])?$_SESSION['profile_pic']:"img/default-profile.png") ?>" alt="profile image"></a>
             
         </div>
         

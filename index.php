@@ -12,22 +12,23 @@ include_once "dbconn.php"; ?>
         <div class="category-section container" > 
             <h1>EXPLORE OUR CATEGORIES</h1>
             <div class="category-flex">
-                <a href="./categoryPage.php" class="category-item">
+                
+                <a href="./categoryPage.php?category=2" class="category-item">
                         <div class="category-icon"><i class="fas fa-cookie"></i></div>
                         <span>Snacks</span>
                 </a>
 
-                <a href="./categoryPage.php" class="category-item">
+                <a href="./categoryPage.php?category=3" class="category-item">
                         <div class="category-icon"><i class="fa-solid fa-bottle-water"></i></i></div>
                         <span>Drinks</span>
                 </a>
 
-                <a href="./categoryPage.php" class="category-item">
+                <a href="./categoryPage.php?category=4" class="category-item">
                         <div class="category-icon"><i class="fas fa-pump-soap"></i></div>
                         <span>Hygiene</span>
                 </a>
 
-                <a href="./categoryPage.php" class="category-item">
+                <a href="./categoryPage.php?category=5" class="category-item">
                     <div class="category-icon"><i class="fa fa-medkit"></i></div>
                     <span>Medicine</span>
                 </a>
@@ -91,6 +92,26 @@ include_once "dbconn.php"; ?>
     
 </div>
 
+
+<div id="cartModal" class="modal" >
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        
+        <h3 id="modal-product-name">Product Name</h3>
+        <img id="modal-product-image" class="modal-product-image" src="img/default-image.png" alt="product image" >
+        <p>Price: RM<span id="modal-product-price">0.00</span></p>
+        
+        <form id="modal-cart-form" >
+            <input type="hidden" id="modal-product-id" name="product_id">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="modal-quantity" name="quantity" value="1" min="1">
+            <br>
+            <button class="modal-btn" type="submit">
+                Confirm Add to Cart
+            </button>
+        </form>
+    </div>
+</div>
 
 
 

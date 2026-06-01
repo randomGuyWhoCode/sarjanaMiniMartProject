@@ -10,7 +10,7 @@ include_once "dbconn.php"; ?>
                 $sql = "SELECT * FROM category";
                 $query = mysqli_query($dbconn, $sql);
                 while($row_rs = mysqli_fetch_assoc($query)) {
-                    echo '<option value="' . $row_rs["category_id"] . '"> ' . $row_rs["category_name"] . ' </option>';
+                    echo '<option value="' . $row_rs["category_id"] . '" '. ($_GET["category"]==$row_rs["category_id"]?"selected":" ") .' > ' . $row_rs["category_name"] . ' </option>';
                 }
             ?>
         </select>
@@ -19,7 +19,7 @@ include_once "dbconn.php"; ?>
             <?php 
                 include_once("card.php");
                 include_once("dbconn.php");
-                $sql = "SELECT * FROM product WHERE category_id = 1 ORDER BY RAND()";
+                $sql = "SELECT * FROM product WHERE category_id = {$_GET["category"]} ORDER BY RAND()";
                 $query = mysqli_query($dbconn, $sql);
                 while($row_rs = mysqli_fetch_assoc($query)) {
                     createCard($row_rs["product_id"], $row_rs["product_name"], $row_rs["selling_price"], $row_rs["product_dir"]);
@@ -29,29 +29,46 @@ include_once "dbconn.php"; ?>
     
 </div>
 
+<div id="cartModal" class="modal" >
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        
+        <h3 id="modal-product-name">Product Name</h3>
+        <img id="modal-product-image" class="modal-product-image" src="img/default-image.png" alt="product image" >
+        <p>Price: RM<span id="modal-product-price">0.00</span></p>
+        
+        <form id="modal-cart-form">
+            <input type="hidden" id="modal-product-id" name="product_id">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="modal-quantity" name="quantity" value="1" min="1">
+            <br>
+            <button class="modal-btn" type="submit">
+                Confirm Add to Cart
+            </button>
+        </form>
+    </div>
+</div>
+
 <script>
     let category = document.getElementById("category");
     let itemContainer = document.getElementById("category_items");
 
+    
+
     category.onchange = ()=>{
-        //Remove all element within div
-        itemContainer.replaceChildren();
+        // loading
+        itemContainer.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-2x"></i>';
 
-        // fetch('categoryPage.php?val=' + category.value)
-        // .then(response => response.text())
-        // .then(data => console.log('Response from PHP:', data));
-
-        // fetch('get_data.php', {
-        // method: 'POST',
-        // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        // body: 'id=' + val
-        // })
-        // .then(response => response.text()) // Use .json() if PHP returns JSON
-        // .then(data => {
-        //     // Update your element with the data received from PHP
-        //     document.getElementById('resultDisplay').innerHTML = data;
-        // })
-        // .catch(error => console.error('Error:', error));
+        fetch('categoryPage0.php?category=' + category.value)
+        .then(response => response.text())
+        .then(html => {
+            
+            itemContainer.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            container.innerHTML = '<p>Something went wrong. Please try again.</p>';
+        });
         
     }
 </script>

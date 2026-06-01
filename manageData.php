@@ -13,6 +13,7 @@
     <div class="side-margin manage-page">
         <div class="header">
             <h1 >Manage Data</h1>
+
             <i class="fa-solid fa-folder fa-2x"></i>
         </div>
         <div class="data-filter container">
@@ -21,7 +22,7 @@
                 <input type="text" class="search-input" placeholder="Search...">
             </div>
 
-            <select name="" id="">
+            <select name="type" id="type">
                 <option value="product">Product</option>
                 <option value="customer">Customer</option>
                 <option value="staff">Staff</option>
@@ -29,27 +30,41 @@
             </select>
             
         </div>
-        <div class="data-list container">
+        <div class="data-list container" id="data-list">
             <?php 
-            $items = ["Farm fresh original 1l"=>"./img/fresh_milk_1L.png",
-                            "Farm fresh chocolate 1l"=>"./img/chocolate_milk.png",
-                            "Biscuit Tiger"=>"./img/biscuit_tiger.png",
-                            "Vico"=>"./img/Vico.png",
-                            "Colgate Toothbrush"=>"./img/Colgate_toothbrush.png",
-                            "Indomie"=>"./img/indomie-mi.png"];
+            include_once("dbconn.php");
+            include_once("card.php");
 
-            foreach($items as $key => $value) {
-                include_once("card.php");
-                createDataCard($key);
-            }
-            foreach($items as $key => $value) {
-                include_once("card.php");
-                createDataCard($key);
+            $sql = "SELECT * FROM product ORDER BY RAND()";
+            $query = mysqli_query($dbconn, $sql);
+            while($row_rs = mysqli_fetch_assoc($query)) {
+                createProductSlip($row_rs["product_id"], $row_rs["product_name"], $row_rs["selling_price"]);
             }
             ?>
         </div>
         
         
     </div>
+    <script>
+        document.getElementById('type').addEventListener('change', function() {
+            const selectedType = this.value;
+            const container = document.getElementById('data-list');
+            
+            // loading
+            container.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-2x"></i>';
+
+            // Fetch data 
+            fetch('manageData0.php?type=' + selectedType)
+            .then(response => response.text())
+            .then(html => {
+                
+                container.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                container.innerHTML = '<p>Something went wrong. Please try again.</p>';
+            });
+        });
+    </script>
 </body>
 </html>

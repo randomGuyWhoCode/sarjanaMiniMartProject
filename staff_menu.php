@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,22 +11,40 @@
     <title>Sarjana Minimart</title>
 </head>
 <body>
-    <?php include("sidebar.php"); staffNav()?>
+    <?php 
+    include("sidebar.php"); 
+    include("dbconn.php");
+
+    staffNav();
+
+    // determine staff name
+    $nameArr = explode(" " , $_SESSION['name']);
+    if(count($nameArr) <= 0) {
+        $staff_name = "Guest";
+    }else if(count($nameArr) == 1) {
+        $staff_name = $nameArr[0];
+    }else {
+        $staff_name = $nameArr[0] . " " . $nameArr[1];
+    }
+
+    $sql = "SELECT count(*) FROM employee";
+    $query = mysqli_query($dbconn, $sql);
+    
+    ?>
     
     <div class="side-margin">
         <img src="
         <?php
-        session_start();
         echo $_SESSION['profile_pic'];
         ?>" alt="profile image"
          /> 
         <div class="header">
             <h1 >Staff Dashboard</h1>
-            <p>Hello Adam!</p>
+            <p>Hello <?php echo $staff_name; ?>!</p>
         </div>
 
         <section class="info-cards">
-            <div class="info-card">Total Staff: 12</div>
+            <div class="info-card">Total Staff: <?php  echo mysqli_num_rows($query)?></div>
             <div class="info-card">Total Registered Customer: 210</div>
             <div class="info-card">Amount Of Sales: 23</div>
         </section>

@@ -44,26 +44,24 @@ if (isset($_GET['code'])) {
 
 
         // Check staff
-        // $sql = "SELECT * FROM employee WHERE email = '$email'";
-        // $query = mysqli_query($dbconn, $sql) or die ("Error: " . mysqli_error($dbconn));
-        // if (mysqli_num_rows($query) != 0) {
-        //     $r = mysqli_fetch_assoc($query);
+        $sql = "SELECT * FROM employee WHERE email = '$email'";
+        $query = mysqli_query($dbconn, $sql) or die ("Error: " . mysqli_error($dbconn));
+        if (mysqli_num_rows($query) != 0) {
+            $r = mysqli_fetch_assoc($query);
             
-        //     $_SESSION["name"] = $name;
-        //     $_SESSION["id"] = $id;
-        //     $_SESSION["email"] = $email;
-        //     $_SESSION["profile_pic"] = $profile_pic;
+            $_SESSION["name"] = $name;
+            $_SESSION["id"] = $id;
+            $_SESSION["email"] = $email;
+            $_SESSION["profile_pic"] = $profile_pic;
+            $_SESSION["is_staff"] = true;
 
-
-        //     $_SESSION['studentnumber'] = $r['employee_id']; 
-        //     $_SESSION['studentname'] = $r['name'];
-        //     echo "<script>console.log({$_SESSION['studentnumber']});</script>";
+            echo "<script>console.log({$_SESSION['studentnumber']});</script>";
             
-        //     // Redirect to staff menu
-        //     header("Location: staff_menu.php");
-        //     // header("Location: index.php");
-        //     exit();
-        // }
+            // Redirect to staff menu
+            header("Location: staff_menu.php");
+            // header("Location: index.php");
+            exit();
+        }
 
 
         // Search your database using only the email address
@@ -71,11 +69,10 @@ if (isset($_GET['code'])) {
         $query = mysqli_query($dbconn, $sql) or die ("Error: " . mysqli_error($dbconn));
         
         if (mysqli_num_rows($query) == 0) {
-            // Unregistered email—deny access
+            // Unregistered email
             echo "<script>alert('Your Google account is not registered as a student!'); window.location='login.php';</script>";
             exit();
         } else {
-            // Get customer info from database
             $r = mysqli_fetch_assoc($query);
 
             $_SESSION["name"] = $r['studentname'];
@@ -83,7 +80,30 @@ if (isset($_GET['code'])) {
             $_SESSION["email"] = $email;
             $_SESSION["programcode"] = $r['programcode'];
             $_SESSION["profile_pic"] = $profile_pic;
+            $_SESSION["is_staff"] = false;
 
+
+            //Check if user have past shopping cart that is not checkout
+            $sql = "SELECT * FROM shopping_cart WHERE customer_id = {$_SESSION["id"]} AND active = TRUE";
+            $query = mysqli_query($dbconn, $sql)  or die ("Error: " . mysqli_error($dbconn));
+            $row = mysqli_num_rows($query);
+            if($row === 0) {
+                $_SESSION["cart"] = [];
+            }else {
+                $items = [];
+                //get cart id
+                $cart = mysqli_fetch_assoc($query);
+                $cart_id = $cart["cart_id"];
+
+                //get all item in cart
+                $sql = "SELECT * FROM cart_item WHERE cart_id = {$cart_id}";
+                $query = mysqli_query($dbconn, $sql)  or die ("Error: " . mysqli_error($dbconn));
+                while($row_rs = mysqli_fetch_assoc($query)) {
+                    $items[$row_rs["product_id"]] = $row_rs["quantity"];
+                }
+                    
+            }
+            
 
             echo "<script>console.log({$_SESSION['studentnumber']});</script>";
             
@@ -123,6 +143,8 @@ if (isset($_GET['code'])) {
                 <a href="<?php echo $login_url; ?>" class="google-login-button" style="text-decoration: none;">
                     <label><i class="fa fa-google google-icon" aria-hidden="true"></i> Log In with Google</label>
                 </a>
+                <div class="separator">Or</div>
+                <a class="underline" href="./index.php">Continue as guest...</a>
             </div>
 
         </div>
