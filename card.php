@@ -32,16 +32,16 @@
                 </div>';
     }
 
-    function createShoppingCard($name, $image) {
+    function createShoppingCard($name, $price, $quantity,  $image) {
         echo '<div class="cart-card">
-                <img src="'. $image .'" alt="">
+                <img src="'. $image .'" alt="product image">
                 <div class="cart-information">
                     <h2>' . $name . '</h2>
-                    <p>RM5.99</p>
+                    <p>RM'.$price.'</p>
                 </div>
                 <div class="counter">
                     <button>-</button> 
-                    <p id="counting">0</p>
+                    <p id="counting">'.$quantity.'</p>
                     <button>+</button>
                 </div>
                 <input type="checkbox" id="'.$name.'" name="item" value="'.$name.'" />
@@ -77,8 +77,7 @@
                     <h2>' . $name . '</h2>
                     <p>'. $email .'</p>
                 </div>
-                <a href="#" onclick="window.location.href=\'updateDataPage.php?id=' . $id . '&type=\' + document.getElementById(\'type\').value; return false;">  <i class="fa-solid fa-rotate fa-2x update"></i></a>
-                <a><i class="fa-solid fa-trash fa-2x logout"></i></a>
+                
               </div>';
     }
     function createStaffSlip($id, $name, $phone, $email) {
@@ -106,6 +105,14 @@
                 <i class="fa-solid fa-trash fa-2x logout"></i>
               </div>';
     }
+
+    function createCheckoutSlip($name, $price, $quantity) {
+        echo '<div class="checkout-slip">
+                <h3>Name: '.$name.'</h3>
+                <p>Price: '.$price.'</p>
+                <p>Quantity: '.$quantity.'</p>
+              </div>';
+    }
 ?>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -113,18 +120,17 @@
     const closeBtn = document.querySelector(".close-btn");
     const cartForm = document.getElementById("modal-cart-form");
 
-    // 1. Open Modal and Populate Data
+
     document.querySelectorAll(".cart-btn").forEach(button => {
         
         button.addEventListener("click", function() {
             
-            // get value
+
             const id = this.getAttribute("data-id");
             const name = this.getAttribute("data-name");
             const price = this.getAttribute("data-price");
             const image = this.getAttribute("data-image");
 
-            // put into modal
             document.getElementById("modal-product-id").value = id;
             document.getElementById("modal-product-name").innerText = name;
             document.getElementById("modal-product-price").innerText = price;
@@ -145,35 +151,18 @@
 
         const formData = new FormData(this);
 
-        fetch("add_to_cart.php", {
-            method: "POST",
+        fetch('add_to_cart.php', {
+            method: 'POST',
             body: formData
         })
         .then(response => response.json())
         .then(data => {
+            alert(data.message); 
             if (data.success) {
-                alert("Product successfully added to cart!");
-                container.innerHTML = html;
                 modal.style.display = "none";
-                // update a cart item counter on your header here
-            } else {
-                alert("Something went wrong. Please try again.");
             }
-        })
-        .catch(error => console.error("Error:", error));
+        });
     });
 });
 
-// function checkLogin() {
-//     <?php 
-//     if(empty($_SESSION["name"])) {
-//         ?> 
-//         const res = confirm("Login to Access this page");
-//         if(res) {
-//             window.location.href = "loginPage.php";
-//         }
-//         <?php
-//     }
-//     ?>
-// }
 </script>

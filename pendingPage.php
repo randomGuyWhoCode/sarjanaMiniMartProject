@@ -12,7 +12,7 @@
     <?php include("sidebar.php"); staffNav();?>
     <div class="side-margin">
         <div class="header">
-            <h1 >Pending Queue</h1>
+            <h2 >Pending Queue</h2>
             <i class="fas fa-shipping-fast fa-2x"></i>
         </div>
     </div>

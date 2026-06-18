@@ -33,13 +33,13 @@
     ?>
     
     <div class="side-margin">
-        <img src="
+        <!-- <img src="
         <?php
-        echo $_SESSION['profile_pic'];
+        // echo $_SESSION['profile_pic'];
         ?>" alt="profile image"
-         /> 
+         />  -->
         <div class="header">
-            <h1 >Staff Dashboard</h1>
+            <h2 >Staff Dashboard</h2>
             <p>Hello <?php echo $staff_name; ?>!</p>
         </div>
 
@@ -125,7 +125,7 @@
         };
 
       myChart.setOption(option);
-      myChart2.setOption(option2);
+      //myChart2.setOption(option2);
     </script>
 
 

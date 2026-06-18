@@ -11,19 +11,19 @@
 </head>
 <body>
     
-    <nav class="top-bar">
-        <a href="./index.php"><img class="top-bar-img" src="./img/sarjana.png" alt=""></a>
-        <div class="search-bar">
-            <input type="text" class="search-input" placeholder="Search...">
-        </div>
-        <div class="right-bar">
-            <div>
-                
-            </div>
-            <a href="./shopping_cart.php"><img class="top-bar-img" src="./img/cart.png" alt="shopping cart icon"></a>
-            <a href="./profile.php"><img class="top-bar-img profile-img" src="<?php echo (isset($_SESSION['profile_pic'])?$_SESSION['profile_pic']:"img/default-profile.png") ?>" alt="profile image"></a>
-            
-        </div>
+    <?php
+    include "sidebar.php";
+
+    if(isset($_SESSION["is_staff"]) && $_SESSION["is_staff"] ) {
+        staffNav();
+    }else {
+        customerNav();
+    }
+    
+    
+    ?>
+   
         
-    </nav>
+        
+    
 

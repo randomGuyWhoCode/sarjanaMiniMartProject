@@ -2,6 +2,7 @@
 // We temporarily call the Google client settings just to generate the dynamic login URL
 require_once 'google-api/google-api/vendor/autoload.php';
 include_once "dbconn.php";
+include_once "pdoconn.php";
 
 $client = new Google\Client();
 
@@ -44,24 +45,24 @@ if (isset($_GET['code'])) {
 
 
         // Check staff
-        $sql = "SELECT * FROM employee WHERE email = '$email'";
-        $query = mysqli_query($dbconn, $sql) or die ("Error: " . mysqli_error($dbconn));
-        if (mysqli_num_rows($query) != 0) {
-            $r = mysqli_fetch_assoc($query);
+        // $sql = "SELECT * FROM employee WHERE email = '$email'";
+        // $query = mysqli_query($dbconn, $sql) or die ("Error: " . mysqli_error($dbconn));
+        // if (mysqli_num_rows($query) != 0) {
+        //     $r = mysqli_fetch_assoc($query);
             
-            $_SESSION["name"] = $name;
-            $_SESSION["id"] = $id;
-            $_SESSION["email"] = $email;
-            $_SESSION["profile_pic"] = $profile_pic;
-            $_SESSION["is_staff"] = true;
+        //     $_SESSION["name"] = $name;
+        //     $_SESSION["id"] = $id;
+        //     $_SESSION["email"] = $email;
+        //     $_SESSION["profile_pic"] = $profile_pic;
+        //     $_SESSION["is_staff"] = true;
 
-            echo "<script>console.log({$_SESSION['studentnumber']});</script>";
+        //     echo "<script>console.log({$_SESSION['studentnumber']});</script>";
             
-            // Redirect to staff menu
-            header("Location: staff_menu.php");
-            // header("Location: index.php");
-            exit();
-        }
+        //     // Redirect to staff menu
+        //     header("Location: staff_menu.php");
+        //     // header("Location: index.php");
+        //     exit();
+        // }
 
 
         // Search your database using only the email address
@@ -82,37 +83,40 @@ if (isset($_GET['code'])) {
             $_SESSION["profile_pic"] = $profile_pic;
             $_SESSION["is_staff"] = false;
 
-
-            //Check if user have past shopping cart that is not checkout
-            $sql = "SELECT * FROM shopping_cart WHERE customer_id = {$_SESSION["id"]} AND active = TRUE";
-            $query = mysqli_query($dbconn, $sql)  or die ("Error: " . mysqli_error($dbconn));
-            $row = mysqli_num_rows($query);
-            if($row === 0) {
-                $_SESSION["cart"] = [];
-            }else {
-                $items = [];
-                //get cart id
-                $cart = mysqli_fetch_assoc($query);
-                $cart_id = $cart["cart_id"];
-
-                //get all item in cart
-                $sql = "SELECT * FROM cart_item WHERE cart_id = {$cart_id}";
-                $query = mysqli_query($dbconn, $sql)  or die ("Error: " . mysqli_error($dbconn));
-                while($row_rs = mysqli_fetch_assoc($query)) {
-                    $items[$row_rs["product_id"]] = $row_rs["quantity"];
-                }
-                    
+            $db = new Database();
+            $sql = "SELECT * FROM shopping_cart WHERE studentno  = ? AND active = 1";
+            $data = $db->query($sql, [$_SESSION["id"]])->fetch();
+            if ($data) {
+                $_SESSION["cart_id"] = $data["cart_id"];
             }
-            
 
-            echo "<script>console.log({$_SESSION['studentnumber']});</script>";
+
+            // $sql = "SELECT * FROM shopping_cart WHERE studentno  = {$_SESSION["id"]} AND active = 1";
+            // $query = mysqli_query($dbconn, $sql)  or die ("Error: " . mysqli_error($dbconn));
+            // $row = mysqli_num_rows($query);
+            // if($row === 0) {
+            //     $_SESSION["cart"] = [];
+            // }else {
+            //     $items = [];
+            //     //get cart id
+            //     $cart = mysqli_fetch_assoc($query);
+            //     $cart_id = $cart["cart_id"];
+
+            //     //get all item in cart
+            //     $sql = "SELECT * FROM cart_item WHERE cart_id = {$cart_id}";
+            //     $query = mysqli_query($dbconn, $sql)  or die ("Error: " . mysqli_error($dbconn));
+            //     while($row_rs = mysqli_fetch_assoc($query)) {
+            //         $items[] = [$row_rs["product_id"]->$row_rs["quantity"]];
+            //     }
+            //     print_r($items);
+            //     $_SESSION["cart"][] = $items;
+            // }
             
             // Redirect to menu
             header("Location: index.php");
             exit();
         }
     } else {
-        echo "<script>console.log('test5');</script>";
         echo "Error fetching access token.";
         exit();
     }
@@ -151,25 +155,25 @@ if (isset($_GET['code'])) {
         
 
     </div>
+    <script>
+        function handleCredentialResponse(response) {
+        console.log("Encoded JWT ID token: " + response.credential);
+
+        // Send to your PHP backend
+        fetch("google-login.php", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ token: response.credential })
+        })
+        .then(res => res.text())
+        .then(data => {
+            console.log(data);
+            window.location.href = "index.php";
+        });
+        } 
+    </script>
 </body>
 </html>
 
-<script>
-function handleCredentialResponse(response) {
-  console.log("Encoded JWT ID token: " + response.credential);
-
-  // Send to your PHP backend
-  fetch("google-login.php", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ token: response.credential })
-  })
-  .then(res => res.text())
-  .then(data => {
-    console.log(data);
-    window.location.href = "index.php";
-  });
-} 
-</script>

@@ -1,66 +1,106 @@
 <?php
 session_start();
 include "dbconn.php";
+include "pdoconn.php";
 
+header('Content-Type: application/json');
 
-// check if cart is initialize
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'], $_POST['quantity'], $_SESSION['name'], $_SESSION['id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'], $_POST['quantity'], $_SESSION['id'])) {
+    
     $product_id = (int)$_POST['product_id'];
     $quantity = (int)$_POST['quantity'];
-    $customer_id = (int)$_SESSION['id'];
+    $student_id = (int)$_SESSION['id'];
 
     if ($quantity > 0) {
-        // true if product is already in cart, else new product added into database
-        if (isset($_SESSION['cart'][$product_id])) {
-            $_SESSION['cart'][$product_id] += $quantity;
+        $db = new Database();
 
-            $sql = "SELECT * FROM shopping_cart WHERE studentno = $customer_id AND active = true";
-            $query = mysqli_query($dbconn, $sql);
-            $cartID = mysqli_fetch_assoc($query)["cart_id"];
+        //Check cart if already exist
+        if(!isset($_SESSION["cart_id"])) {
+            $sql = "INSERT INTO shopping_cart (date_created, studentno, active) VALUES (NOW(), ?, true)";
+            $db->query($sql,[$student_id]);
+            $_SESSION["cart_id"] = $db->lastInsertId();
+        }
 
-            $sql = "UPDATE cart_item SET quantity = $quantity;";
-            if (mysqli_query($dbconn, $sql)) {
-                echo "<script>alert('Product added successfully!');</script>";
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Database error: Could not create shopping cart.']);
+
+        //old
+        // $sql = "SELECT cart_id FROM shopping_cart WHERE studentno = $student_id AND active = true LIMIT 1";
+        // $query = mysqli_query($dbconn, $sql);
+
+        // if ($query && mysqli_num_rows($query) > 0) {
+        //     // user have past cart
+        //     $cart = mysqli_fetch_assoc($query);
+        //     $cartID = $cart['cart_id'];
+        // } else {
+        //     // new cart
+        //     $sql = "INSERT INTO shopping_cart (date_created, studentno, active) VALUES (NOW(), $student_id, true)";
+        //     if (mysqli_query($dbconn, $sql)) {
+        //         $cartID = mysqli_insert_id($dbconn);
+        //     } else {
+        //         echo json_encode(['success' => false, 'message' => 'Database error: Could not create shopping cart.']);
+        //         exit();
+        //     }
+        // }
+
+        // check product in cart if already exist in database
+        $sql = "SELECT quantity FROM cart_item WHERE cart_id = ? AND product_id = ? LIMIT 1";
+        $item = $db->query($sql, [$_SESSION["cart_id"], $product_id])->fetch();
+        if($item) {
+            $new_quantity = $item['quantity'] + $quantity;
+            $sql = "UPDATE cart_item SET quantity = ? WHERE cart_id = ? AND product_id = ?";
+            if($db->query($sql, [$new_quantity, $_SESSION["cart_id"], $product_id] )) {
+                echo json_encode(['success' => true, 'message' => 'Product quantity has been updated in cart!']);
+                exit();
+            }else {
+                echo json_encode(['success' => false, 'message' => 'Failed to update item quantity in cart.']);
                 exit();
             }
-
-        } else {
-            $_SESSION['cart'][$product_id] = $quantity;
-
-            //add the new created cart to database
-            $sql = "INSERT INTO  shopping_cart (date_created, studentno, active) VALUES (NOW(), {$_SESSION['id']}, true)";
-            if (mysqli_query($dbconn, $sql)) {
-                echo "<script>alert('Shopping cart created successfully!');</script>";
-            } else {
-                echo "<script>alert('Something went wrong');</script>";
+        }else {
+            $sql = "INSERT INTO cart_item (cart_id, product_id, quantity) VALUES (?, ?, ?)";
+            if($db->query($sql, [$_SESSION["cart_id"], $product_id, $quantity])) {
+                echo json_encode(['success' => true, 'message' => 'Product added to cart successfully!']);
+                exit();
+            }else {
+                echo json_encode(['success' => false, 'message' => 'Failed to add product to cart.']);
+                exit();
             }
-
-            $sql = "SELECT * FROM shopping_cart WHERE studentno = {$_SESSION['id']} AND active = true";
-            $query = mysqli_query($dbconn, $sql);
-            $cartID = mysqli_fetch_assoc($query)["cart_id"];
-            
-            $sql = "INSERT INTO cart_item (cart_id, product_id, quantity) VALUES ($cartID, $quantity, {$_SESSION['id']})";
-            if (mysqli_query($dbconn, $sql)) {
-                echo "<script>alert('Product added successfully!');</script>";
-            } else {
-                echo "<script>alert('Something went wrong');</script>";
-            }
-            
         }
+
+
+        // $sql = "SELECT quantity FROM cart_item WHERE cart_id = {$_SESSION["cart-id"]} AND product_id = $product_id LIMIT 1";
+        // $item_query = mysqli_query($dbconn, $sql);
+
+        // if ($item_query && mysqli_num_rows($item_query) > 0) {
+        //     $item = mysqli_fetch_assoc($item_query);
+        //     $new_quantity = $item['quantity'] + $quantity;
+
+        //     $sql = "UPDATE cart_item SET quantity = $new_quantity WHERE cart_id = {$_SESSION["cart-id"]} AND product_id = $product_id";
+        //     if (mysqli_query($dbconn, $sql)) {
+        //         $_SESSION['cart'][$product_id] = $new_quantity;
+        //         echo json_encode(['success' => true, 'message' => 'Product quantity updated in cart!']);
+        //         exit();
+        //     } else {
+        //         echo json_encode(['success' => false, 'message' => 'Failed to update item quantity.']);
+        //         exit();
+        //     }
+
+        // } else {
+        //     $sql = "INSERT INTO cart_item (cart_id, product_id, quantity) VALUES ({$_SESSION["cart-id"]}, $product_id, $quantity)";
+        //     if (mysqli_query($dbconn, $sql)) {
+        //         $_SESSION['cart'][$product_id] = $quantity;
+        //         echo json_encode(['success' => true, 'message' => 'Product added to cart successfully!']);
+        //         exit();
+        //     } else {
+        //         echo json_encode(['success' => false, 'message' => 'Failed to add product to cart.']);
+        //         exit();
+        //     }
+        // }
+
+
     }    
 
-    // Respond back to JavaScript
-        echo json_encode(['success' => true]);
-        exit();
-    
+    echo json_encode(['success' => false, 'message' => 'Quantity must be greater than 0.']);
+    exit();
 }
 
-// Return failure if something went wrong
-echo json_encode(['success' => false]);
+echo json_encode(['success' => false, 'message' => 'Invalid request data or unauthorized session.']);
 exit();

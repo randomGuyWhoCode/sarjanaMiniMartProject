@@ -61,7 +61,7 @@ if (isset($_POST['submit_product'])) {
     <div class="side-margin">
         <form action="addProduct.php" method="POST" enctype="multipart/form-data">
             <div class="header">
-                <h1 >Add New Product</h1>
+                <h2 >Add New Product</h2>
                 <i class="fa-solid fa-floppy-disk fa-2x"></i>
             </div>
 

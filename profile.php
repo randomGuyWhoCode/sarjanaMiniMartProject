@@ -16,7 +16,7 @@
         <?php include "sidebar.php"; customerNav();?>
         <div class="side-margin profile-page">
             <div class="header">
-                <h1 >Profile</h1>
+                <h2 >Profile</h2>
                 <p>Hello <?php 
                             if(isset($_SESSION['name'])) {
                                 $nameArr = explode(" " , $_SESSION['name']);
